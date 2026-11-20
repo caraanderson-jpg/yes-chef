@@ -2794,6 +2794,41 @@ steps:[
 fod:"Oats, peanut butter, chia and pumpkin seeds are low FODMAP in these amounts. Maple syrup replaces dates and honey.",
 swaps:"Use almond butter, or roll in desiccated coconut.",
 store:"Fridge 1 week. Freezer 2 months."}
+,
+
+{id:"mapo-tofu",name:"Mapo Tofu",by:"yc",cat:"dinner",meals:["D"],diet:"meat",freq:"Weekly",serves:3,prep:10,cook:15,
+desc:"Silky cubes of tofu in a glossy, spicy, numbing Sichuan sauce with pork mince. Fiery, savoury and ready in 25 minutes.",
+equip:"Wok or large frying pan, Saucepan, Small bowl, Slotted spoon, Mortar and pestle or rolling pin, Knife, Chopping board",
+ing:[
+[450,"g","firm tofu, cut into 2 cm cubes","dairy","soybean","150 g each, low FODMAP"],
+[200,"g","pork mince","meat"],
+[2,"tbsp","garlic-infused oil","pantry"],
+[1,"tbsp","fresh ginger, finely chopped","veg","~ginger"],
+[1,"tbsp","chilli bean paste (doubanjiang)","pantry","~chilli","Check the label for garlic. Small amount only"],
+[1,"tsp","Sichuan peppercorns, toasted and crushed","herb","~sichuan-pepper"],
+[1,"tsp","chilli flakes","herb","~chilli"],
+[1,"tbsp","soy sauce","pantry","soybean"],
+[1,"tsp","sugar","pantry"],
+[250,"ml","chicken bone broth","other","","Or a certified low FODMAP stock","bone-broth"],
+[1,"tbsp","cornflour mixed with 2 tbsp water","pantry"],
+[1,"tsp","sesame oil","pantry","sesame"],
+[3,"","spring onions, green tops only, sliced","veg","spring-onion-green"],
+[1,"tbsp","chilli oil, to serve (optional)","pantry","~chilli","Check the label for garlic or onion"],
+[1.5,"cup","jasmine rice, uncooked","noodle","rice"]],
+steps:[
+["Start cooking 1½ cups of rice."],
+["Toast 1 tsp Sichuan peppercorns in a dry wok on MEDIUM for 1 minute until fragrant. Tip out and crush finely.",1],
+["Bring a saucepan of salted water to a gentle simmer. Add the tofu cubes and simmer 2 minutes. This firms them up so they don’t break. Lift out with a slotted spoon.",2],
+["Put the wok on MEDIUM-HIGH. Add 2 tbsp garlic oil and the pork mince. Cook 4 minutes, breaking it up, until browned and a little crispy.",4],
+["Add the ginger, 1 tbsp chilli bean paste and 1 tsp chilli flakes. Stir 1 minute until the oil turns red.",1],
+["Pour in 250 ml broth, 1 tbsp soy sauce and 1 tsp sugar. Bring to a simmer."],
+["Gently slide in the tofu. Simmer 4 minutes, nudging the pan rather than stirring so the tofu stays whole.",4],
+["Stir the cornflour slurry, then drizzle it in. Gently shake the pan until the sauce turns glossy and thick, about 1 minute.",1],
+["Turn off the heat. Add 1 tsp sesame oil, most of the Sichuan pepper and the spring onion tops."],
+["Serve over rice. Top with the rest of the Sichuan pepper and a drizzle of chilli oil."]],
+fod:"Firm tofu is used because silken tofu is high FODMAP. Garlic-infused oil, ginger and spring onion tops replace garlic and leek, and the chilli bean paste is kept to 1 tbsp across 3 serves.",
+swaps:"Vegan: skip the pork and use 2 handfuls of chopped oyster mushrooms (75 g each) instead, with low FODMAP vegetable stock.",
+store:"Fridge 3 days. Reheat gently. The flavour gets even better overnight."}
 
 ];
 
