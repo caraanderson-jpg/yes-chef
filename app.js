@@ -121,13 +121,16 @@ function myToRecipe(m){
     ing:parseIng(m.ing),steps:String(m.steps||"").split(/\n/).map(s=>s.trim().replace(/^\d+[.)]\s*/,"")).filter(Boolean).map(s=>[s]),
     fod:m.fod||"",swaps:m.swaps||"",store:m.store||"",mine:true,ai:!!m.ai,url:m.url||"",raw:m};
 }
+function isBuilt(id){return BUILT.some(r=>r.id===id)}
+function photoOf(id){return isBuilt(id)?(OFFICIAL[id]||(window.YC_PHOTOS||{})[id]):PHOTOS[id]}
+function canPhoto(r){return isBuilt(r.id)?IS_OWNER:(r.mine&&r.raw&&r.raw.by===UID)}
 function allRecipes(){return BUILT.concat(MY.map(myToRecipe))}
 let IS_OWNER=false;
 function canEditMy(m){return !m||!m.by||m.by===UID}
 function getR(id){return BUILT.find(r=>r.id===id)||(MY.find(m=>m.id===id)?myToRecipe(MY.find(m=>m.id===id)):null)}
 function pal(id){let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))>>>0;return PALS[h%PALS.length]}
 function cover(r,big,noLab){
-  const ph=PHOTOS[r.id]||(window.YC_PHOTOS||{})[r.id];
+  const ph=photoOf(r.id);
   if(ph)return `<div class="cover${big?" big":""}"><img src="${ph}" alt="${esc(r.name)}"></div>`;
   const [a,b]=pal(r.id);
   return `<div class="cover${big?" big":""}" style="background:${a}"><i class="s1" style="background:${b}"></i><i class="s2"></i><i class="s3"></i>${noLab?"":`<span class="lab">${big?"Photo coming soon":esc(CATN[r.cat]||"Recipe")}</span>`}</div>`;
@@ -290,6 +293,28 @@ function vAccount(){
   <div class="panel white"><h3>${ic("edit")}Your account</h3><p class="small" style="margin:4px 0">${esc(PROFILE&&PROFILE.display_name||"")} · ${esc(email)}</p>
   <div class="row" style="margin-top:8px;gap:8px"><button class="btn line sm" data-a="signOut">Sign out</button><a class="btn line sm" href="mailto:?subject=${encodeURIComponent("Delete my Yes Chef! account")}" data-a="delAcct">Delete my account</a></div></div>`;
 }
+const FODMAP_GROUPS=[
+["F","Fermentable","Gut bacteria break these carbs down and make gas.",null],
+["O","Oligosaccharides","Short chains of sugars. Two kinds:",[["Fructans","Wheat, rye, barley, onion, garlic, white part of leek and spring onion, artichoke, inulin / chicory root, watermelon, nectarine"],["GOS","Beans, chickpeas, lentils, cashews, pistachios, silken tofu, soy milk made from whole soybeans"]]],
+["D","Disaccharides","Double sugars. The one that matters is lactose:",[["Lactose","Regular milk, yoghurt, ice cream, custard, and soft cheeses like ricotta, cottage cheese and cream cheese"]]],
+["M","Monosaccharides","Single sugars. The one that matters is excess fructose (more fructose than glucose):",[["Excess fructose","Honey, agave, apples, pears, mango, watermelon, asparagus, sugar snap peas"]]],
+["A","And","",null],
+["P","Polyols","Sugar alcohols. Two kinds:",[["Sorbitol","Apples, pears, stone fruit (peaches, plums, cherries), blackberries, avocado in larger amounts, sugar-free lollies and gum"],["Mannitol","Button and most other mushrooms, cauliflower, celery, sweet potato in larger serves, snow peas"]]]];
+function vFodmap(){
+  return `<a class="back" href="#more">${ic("back")}More</a>
+  <div class="sec" style="padding-top:4px"><div class="sec-h"><h2>What is FODMAP?</h2></div>
+  <p>FODMAPs are a group of carbohydrates (sugars and fibres) that the small intestine doesn’t absorb well. They move into the large intestine, where they draw in water and gut bacteria ferment them, making gas. For most people that’s fine. For people with IBS it can cause bloating, pain, wind, diarrhoea or constipation.</p>
+  <p class="small muted">The low FODMAP diet was developed by Monash University in Melbourne.</p>
+  ${FODMAP_GROUPS.map(([l,n,d,s])=>`<div class="panel white fm-row"><div class="fm-l" aria-hidden="true">${l}</div><div><h3 style="margin:0 0 4px">${esc(n)}</h3>${d?`<p class="small" style="margin:0 0 6px">${esc(d)}</p>`:""}${s?s.map(([k,v])=>`<p class="small" style="margin:6px 0 0"><b>${esc(k)}:</b> ${esc(v)}</p>`).join(""):""}</div></div>`).join("")}
+  <div class="panel tq"><h3>${ic("leaf")}Serving size matters</h3><p class="small" style="margin:0">Many foods are only high FODMAP in bigger amounts. Avocado is fine at 30 g, canned chickpeas at about ¼ cup and sweet potato at 75 g. Canned, rinsed legumes are lower than dried ones because some FODMAPs move into the water. That’s why Yes Chef! recipes list exact amounts.</p></div>
+  <div class="panel white"><h3>${ic("cal")}How the diet works</h3>
+  <p class="small" style="margin:4px 0"><b>1. Swap (2–6 weeks):</b> cut back high FODMAP foods to see if symptoms settle.</p>
+  <p class="small" style="margin:4px 0"><b>2. Reintroduce:</b> test one FODMAP group at a time to find your triggers.</p>
+  <p class="small" style="margin:4px 0"><b>3. Personalise:</b> bring back everything you tolerate and only limit your own triggers.</p>
+  <p class="small muted" style="margin:8px 0 0">It isn’t meant to be followed strictly forever — variety is better for your gut bacteria. Do it with your doctor or an Accredited Practising Dietitian.</p></div>
+  <a class="btn line full" href="#check">${ic("leaf")}Check a recipe for swaps</a>
+  <p class="disc">General information, not medical advice. Check foods in the Monash University FODMAP app.</p></div>`;
+}
 function vCheck(){
   return `<a class="back" href="#more">${ic("back")}More</a>
   <div class="sec" style="padding-top:4px"><div class="sec-h"><h2>Recipe checker</h2></div>
@@ -381,7 +406,7 @@ document.addEventListener("focusout",()=>{if(pendingRender){setTimeout(()=>{cons
 
 /* ============ Supabase ============ */
 const SUPA_URL="https://vbtfjelvowmkjefkzvxi.supabase.co",SUPA_KEY="sb_publishable_lKAlO6TsW-VWo9NnfOloQg_qpMavF82";
-let SB=null,SESSION=null,PROFILE=null,HOUSE=null,HH=null,AUTHREADY=false,CHAN=null;
+let OFFICIAL={},SB=null,SESSION=null,PROFILE=null,HOUSE=null,HH=null,AUTHREADY=false,CHAN=null;
 function sbErr(e){console.error(e);const m=(e&&e.message)||"";
   if(/JWT|session|auth/i.test(m)){toast("Please sign in again.");}
   else if(/row-level security|permission/i.test(m))toast("You don’t have permission to change that.");
@@ -419,8 +444,8 @@ async function loadMy(){const {data}=await SB.from("my_recipes").select("id,crea
   MY=(data||[]).map(r=>Object.assign({},r.data,{id:r.id,by:r.created_by}))}
 async function loadRatings(){const {data}=await SB.from("ratings").select("item,user_id,stars").limit(5000);
   RATINGS=(data||[]).map(r=>({item:r.item,uid:r.user_id,stars:r.stars}))}
-async function loadPhotos(){const {data}=await SB.from("household_photos").select("recipe_id,url").eq("household_id",HH);
-  const p={};(data||[]).forEach(r=>p[r.recipe_id]=r.url);PHOTOS=p}
+async function loadPhotos(){const [{data},{data:off}]=await Promise.all([SB.from("household_photos").select("recipe_id,url").eq("household_id",HH),SB.from("recipe_photos").select("recipe_id,url")]);
+  const p={};(data||[]).forEach(r=>p[r.recipe_id]=r.url);PHOTOS=p;const o={};(off||[]).forEach(r=>o[r.recipe_id]=r.url);OFFICIAL=o}
 function subscribe(){
   if(CHAN)SB.removeChannel(CHAN);
   const re=(fn)=>async()=>{await fn();rerender()};
@@ -432,6 +457,7 @@ function subscribe(){
    .on("postgres_changes",{event:"*",schema:"public",table:"my_recipes",filter:"household_id=eq."+HH},re(loadMy))
    .on("postgres_changes",{event:"*",schema:"public",table:"ratings"},re(loadRatings))
    .on("postgres_changes",{event:"*",schema:"public",table:"household_photos",filter:"household_id=eq."+HH},re(loadPhotos))
+   .on("postgres_changes",{event:"*",schema:"public",table:"recipe_photos"},re(loadPhotos))
    .subscribe(st=>{if(st==="SUBSCRIBED")setSync("synced");else if(st==="CHANNEL_ERROR"||st==="TIMED_OUT")setSync("slow")});
 }
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&SESSION&&HH&&!localDirty){Promise.all([loadState(),loadFinds(),loadMy(),loadRatings(),loadPhotos()]).then(rerender)}});
@@ -526,7 +552,7 @@ window.addEventListener("hashchange",()=>{closeModal();render();window.scrollTo(
 
 function renderTabs(){
   const r=route();
-  const on=t=>(r===t||(t==="recipes"&&/^recipe-/.test(r))||(t==="more"&&/^(finds|my|add-recipe|edit-|prefs|daily|check|terms)/.test(r)))?" on":"";
+  const on=t=>(r===t||(t==="recipes"&&/^recipe-/.test(r))||(t==="more"&&/^(finds|my|add-recipe|edit-|prefs|daily|check|terms|fodmap)/.test(r)))?" on":"";
   const n=needCount();
   $("#tabs").innerHTML=[["home","Home","home"],["recipes","Recipes","book"],["planner","Planner","cal"],["shopping","Shopping","cart"],["more","More","dots"]].map(([k,l,i])=>`<button class="${on(k)}" data-a="go" data-h="${k}" ${on(k)?'aria-current="page"':""}>${ic(i)}<span>${l}</span>${k==="shopping"&&n?`<span class="badge">${n}</span>`:""}</button>`).join("");
 }
@@ -552,6 +578,7 @@ function render(){
     else if(/^edit-/.test(r))h=vForm(r.slice(5));
     else if(r==="daily")h=vDaily();
     else if(r==="check")h=vCheck();
+    else if(r==="fodmap")h=vFodmap();
     else if(r==="terms")h=vTerms();
     else if(r==="prefs")h=vPrefs();
     else h=vHome();
@@ -638,7 +665,7 @@ function vRecipe(id){
   const hc=["","c1","c2"][pal(r.id).indexOf("#0648A1")===0?1:pal(r.id)[0]==="#202020"?2:0];
   return `<a class="back" href="#recipes">${ic("back")}Back to recipes</a>
   ${r.ai?`<div class="warnbox" role="note" style="margin:0 18px 12px">${ic("info")}<div><b>Converted to low FODMAP automatically.</b> It may contain mistakes. Check every ingredient and serving size against the <a href="https://www.monashfodmap.com/" target="_blank" rel="noopener">Monash University FODMAP app</a> before cooking.</div></div>`:""}
-  <div style="position:relative">${cover(r,true)}<span class="btn sm white photo-btn fileov">${ic("camera")}${(PHOTOS[r.id]||(window.YC_PHOTOS||{})[r.id])?"Change photo":"Add photo"}<input type="file" accept="image/*" data-photo="${esc(r.id)}" aria-label="Add photo"></span></div>
+  <div style="position:relative">${cover(r,true)}${canPhoto(r)?`<span class="btn sm white photo-btn fileov">${ic("camera")}${photoOf(r.id)?"Change photo":"Add photo"}<input type="file" accept="image/*" data-photo="${esc(r.id)}" aria-label="Add photo"></span>`:""}</div>
   <div class="rhead ${hc}"><span class="kicker">${esc(CATN[r.cat]||"Recipe")}</span>
   <h1>${esc(r.name)}</h1>${r.desc?`<p>${esc(r.desc)}</p>`:""}
   <div class="stats">${r.prep?`<span>${ic("clock")}Prep ${fmtTime(r.prep)}</span>`:""}${r.cook?`<span>${ic("pot")}Cook ${fmtTime(r.cook)}</span>`:""}<span>${ic("users")}Serves ${r.serves}</span>${pl.big.size?`<span>${ic("leaf")}${pl.big.size} plant${pl.big.size>1?"s":""}${pl.small.size?" + "+pl.small.size+" herbs/spices":""}</span>`:""}</div>
@@ -774,6 +801,7 @@ function vMore(){
   return `<div class="sec"><div class="sec-h"><h2>More</h2></div></div>
   ${tile("daily","var(--em)","sun","The Feel Good Daily","A science-backed wellbeing tip every day")}
   ${tile("finds","var(--tq)","link","Community finds","Recipe links you’ve found online")}
+  ${tile("fodmap","var(--em)","info","What is FODMAP?","What the letters mean and which foods fit where")}
   ${tile("check","var(--ch)","leaf","Recipe checker","Paste ingredients, get low FODMAP swaps")}
   ${tile("my","var(--em)","edit","My recipes","Add your own — with a low FODMAP check")}
   ${tile("favourites","var(--bl)","heart","Saved recipes","Your favourites")}
@@ -944,8 +972,8 @@ document.addEventListener("change",async e=>{
     const id=t.dataset.photo;toast("Adding photo…");
     try{const d=await compress(t.files[0],900,.72);
       const url=await uploadPhoto(d,"recipe-"+id);
-      const {error}=await SB.from("household_photos").upsert({household_id:HH,recipe_id:id,url});if(error)throw error;
-      PHOTOS[id]=url;toast("Photo added");render()}catch(err){if(err&&err.message)sbErr(err);else toast("Couldn’t read that photo — try a different one.")}
+      if(isBuilt(id)){if(!IS_OWNER)return;const {error}=await SB.from("recipe_photos").upsert({recipe_id:id,url,updated_at:new Date().toISOString()});if(error)throw error;OFFICIAL[id]=url}
+      else{const {error}=await SB.from("household_photos").upsert({household_id:HH,recipe_id:id,url});if(error)throw error;PHOTOS[id]=url}toast("Photo added");render()}catch(err){if(err&&err.message)sbErr(err);else toast("Couldn’t read that photo — try a different one.")}
   }
   if(t.id==="fshots"&&t.files&&t.files.length){
     try{pendingShots=[];for(const fl of Array.from(t.files).slice(0,8)){pendingShots.push(await compress(fl,1400,.8))}
