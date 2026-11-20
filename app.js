@@ -168,7 +168,7 @@ function allergensOf(r){
 function scanLine(l){
   const s=l.toLowerCase(),f=[];
   const add=(a,b)=>f.push([a,b]);
-  if(/garlic/.test(s)&&!/infused|garlic oil/.test(s))add("Garlic is high in fructans.","Use garlic-infused oil — the fructans don’t move into oil.");
+  if(/garlic/.test(s)&&!/infused|garlic oil/.test(s))add("Garlic is high in fructans.","Use garlic-infused oil, the fructans don’t move into oil.");
   if(/onion|shallot|scallion/.test(s)){
     if(/spring onion|scallion|green onion/.test(s)){if(!/green (top|part)|tops only/.test(s))add("Spring onion white bulbs are high in fructans.","Use the green tops only.")}
     else add("Onion is high in fructans.","Use spring onion or leek green tops, chives, or a pinch of asafoetida.");
@@ -258,7 +258,7 @@ function termsGate(){
   <ul class="small" style="padding-left:18px;margin:0 0 12px;line-height:1.55">
   <li>Follow the low FODMAP diet with your doctor or an Accredited Practising Dietitian.</li>
   <li>Check foods and serving sizes against the Monash University FODMAP app.</li>
-  <li>Allergen info is automatic and may be incomplete — always read labels.</li>
+  <li>Allergen info is automatic and may be incomplete, always read labels.</li>
   <li>Community recipes and links are added by users and may not be low FODMAP.</li>
   <li>You use the app at your own risk.</li></ul>
   <a href="#terms" data-a="termsRead" style="font-weight:700">Read the full terms &amp; disclaimer</a>
@@ -287,7 +287,7 @@ function vAccount(){
   const email=SESSION&&SESSION.user.email||"";
   return `<div class="panel white"><h3>${ic("users")}Your household</h3>
   <p class="small" style="margin:4px 0 8px">Share this code with your partner or family so you share one planner and shopping list.</p>
-  <div class="code-row"><span class="code" aria-label="Invite code">${esc(HOUSE&&HOUSE.invite_code||"——")}</span><button class="btn line sm" data-a="copyCode">${ic("copy")}Copy</button></div>
+  <div class="code-row"><span class="code" aria-label="Invite code">${esc(HOUSE&&HOUSE.invite_code||"------")}</span><button class="btn line sm" data-a="copyCode">${ic("copy")}Copy</button></div>
   <form data-form="join" class="row" style="margin-top:12px;flex-wrap:nowrap"><input name="code" placeholder="Join with a code" maxlength="8" style="flex:1;text-transform:uppercase" aria-label="Household code"><button class="btn tq sm" type="submit">Join</button></form>
   <div class="row" style="margin-top:10px;gap:8px"><button class="btn line sm" data-a="newCode">New code</button><button class="btn line sm" data-a="leaveHouse">Start my own household</button></div></div>
   <div class="panel white"><h3>${ic("edit")}Your account</h3><p class="small" style="margin:4px 0">${esc(PROFILE&&PROFILE.display_name||"")} · ${esc(email)}</p>
@@ -311,7 +311,7 @@ function vFodmap(){
   <p class="small" style="margin:4px 0"><b>1. Swap (2–6 weeks):</b> cut back high FODMAP foods to see if symptoms settle.</p>
   <p class="small" style="margin:4px 0"><b>2. Reintroduce:</b> test one FODMAP group at a time to find your triggers.</p>
   <p class="small" style="margin:4px 0"><b>3. Personalise:</b> bring back everything you tolerate and only limit your own triggers.</p>
-  <p class="small muted" style="margin:8px 0 0">It isn’t meant to be followed strictly forever — variety is better for your gut bacteria. Do it with your doctor or an Accredited Practising Dietitian.</p></div>
+  <p class="small muted" style="margin:8px 0 0">It isn’t meant to be followed strictly forever, variety is better for your gut bacteria. Do it with your doctor or an Accredited Practising Dietitian.</p></div>
   <a class="btn line full" href="#check">${ic("leaf")}Check a recipe for swaps</a>
   <p class="disc">General information, not medical advice. Check foods in the Monash University FODMAP app.</p></div>`;
 }
@@ -386,14 +386,14 @@ async function push(){
 }
 function writeErr(e){
   const c=e&&e.code;
-  if(c==="invalid_argument"){canWrite=false;setSync("view");toast("You can view this, but changes won’t save — ask the owner to share it with you as an Editor.")}
-  else if(c==="quota_exceeded")toast("Storage is full — delete a few photos or finds.");
-  else if(c==="resource_exhausted")toast("Saving a bit too fast — try again in a moment.");
-  else toast("Couldn’t save just now — it’ll keep working on this phone.");
+  if(c==="invalid_argument"){canWrite=false;setSync("view");toast("You can view this, but changes won’t save, ask the owner to share it with you as an Editor.")}
+  else if(c==="quota_exceeded")toast("Storage is full, delete a few photos or finds.");
+  else if(c==="resource_exhausted")toast("Saving a bit too fast, try again in a moment.");
+  else toast("Couldn’t save just now, it’ll keep working on this phone.");
 }
 function setSync(s){
   syncState=s;const el=$("#sync");if(!el)return;
-  el.textContent={local:"",synced:"Synced",connecting:"Connecting…",slow:"Offline — will sync later"}[s]||"";
+  el.textContent={local:"",synced:"Synced",connecting:"Connecting…",slow:"Offline, will sync later"}[s]||"";
 }
 function stripPhotos(){ /* keep localStorage small */ }
 function rerender(){
@@ -410,7 +410,7 @@ let OFFICIAL={},SB=null,SESSION=null,PROFILE=null,HOUSE=null,HH=null,AUTHREADY=f
 function sbErr(e){console.error(e);const m=(e&&e.message)||"";
   if(/JWT|session|auth/i.test(m)){toast("Please sign in again.");}
   else if(/row-level security|permission/i.test(m))toast("You don’t have permission to change that.");
-  else toast("Couldn’t save just now — check your connection.");}
+  else toast("Couldn’t save just now, check your connection.");}
 async function initDB(){
   if(!window.supabase){setSync("local");AUTHREADY=true;render();return}
   SB=window.supabase.createClient(SUPA_URL,SUPA_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
@@ -498,7 +498,7 @@ function openModal(title,body){
 function closeModal(){$("#modal").innerHTML="";document.body.style.overflow=""}
 
 async function copyText(t){
-  try{await navigator.clipboard.writeText(t);toast("Copied — paste it into a message");}
+  try{await navigator.clipboard.writeText(t);toast("Copied, paste it into a message");}
   catch(e){openModal("Copy this list",`<textarea style="min-height:280px" readonly>${esc(t)}</textarea><p class="hint">Press and hold in the box, Select all, then Copy.</p>`)}
 }
 
@@ -622,9 +622,9 @@ function vHome(){
     <button style="background:var(--tq)" data-a="go" data-h="recipes">${ic("book")}Browse recipes</button>
     <button style="background:var(--ch)" data-a="cookToday">${ic("play")}Cook with me</button>
   </div>
-  ${make.length?`<div class="mk"><b>Prep day this week:</b> make ${make.map(id=>{const r=getR(id);return r?`<a href="#recipe-${id}">${esc(r.name)}</a>`:""}).join(", ")} first — your planned meals use ${make.length>1?"them":"it"}.</div>`:""}
+  ${make.length?`<div class="mk"><b>Prep day this week:</b> make ${make.map(id=>{const r=getR(id);return r?`<a href="#recipe-${id}">${esc(r.name)}</a>`:""}).join(", ")} first, your planned meals use ${make.length>1?"them":"it"}.</div>`:""}
   ${finds.length?`<div class="sec"><div class="sec-h"><h2>Community finds</h2><a href="#finds">See all</a></div></div><div class="grid">${finds.map(fCard).join("")}</div>`:""}
-  <p class="disc">Low FODMAP serves are based on published Monash University and FODMAP Friendly data. Everyone’s tolerance is different — check the Monash FODMAP app and your dietitian.</p>`;
+  <p class="disc">Low FODMAP serves are based on published Monash University and FODMAP Friendly data. Everyone’s tolerance is different, check the Monash FODMAP app and your dietitian.</p>`;
 }
 
 const CHIPS=[["all","All"],["fav","Saved"],["hotpot","Hot pots"],["ramen","Ramen"],["oats","Overnight oats"],["broth","Broths & bases"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Wraps & sandwiches"],["baking","Baking"],["mine","My recipes"],["veg","Vegetarian"],["vegan","Vegan"],["pesc","Pescatarian"]];
@@ -671,7 +671,7 @@ function vRecipe(id){
   <div class="stats">${r.prep?`<span>${ic("clock")}Prep ${fmtTime(r.prep)}</span>`:""}${r.cook?`<span>${ic("pot")}Cook ${fmtTime(r.cook)}</span>`:""}<span>${ic("users")}Serves ${r.serves}</span>${pl.big.size?`<span>${ic("leaf")}${pl.big.size} plant${pl.big.size>1?"s":""}${pl.small.size?" + "+pl.small.size+" herbs/spices":""}</span>`:""}</div>
   <div class="row" style="margin-bottom:12px"><span class="tag ${r.diet}" style="margin:0">${DIETN[r.diet]||""}</span><span class="tag f-${r.freq.split(" ")[0]}" style="margin:0">${esc(r.freq)}</span></div>
   ${r.steps&&r.steps.length?`<button class="btn cookbtn" data-a="cook" data-id="${esc(r.id)}">${ic("play")}Cook with me</button>`:""}
-  <div class="row" style="margin-top:10px"><button class="btn white" style="flex:1" data-a="addPlan" data-id="${esc(r.id)}">${ic("cal")}Add to planner</button><button class="btn ${S.favs[r.id]?"white":"lineW"}" data-a="fav" data-id="${esc(r.id)}" aria-pressed="${!!S.favs[r.id]}" aria-label="${S.favs[r.id]?"Saved — tap to remove":"Save to favourites"}" style="width:56px;padding:0">${ic("heart")}</button></div>
+  <div class="row" style="margin-top:10px"><button class="btn white" style="flex:1" data-a="addPlan" data-id="${esc(r.id)}">${ic("cal")}Add to planner</button><button class="btn ${S.favs[r.id]?"white":"lineW"}" data-a="fav" data-id="${esc(r.id)}" aria-pressed="${!!S.favs[r.id]}" aria-label="${S.favs[r.id]?"Saved, tap to remove":"Save to favourites"}" style="width:56px;padding:0">${ic("heart")}</button></div>
   ${r.url?`<a class="btn lineW full" style="margin-top:10px" href="${esc(r.url)}" target="_blank" rel="noopener">${ic("link")}Original recipe</a>`:""}
   </div>
   <div class="scaler"><div><b>Servings</b></div><div class="stepper"><button data-a="serv" data-id="${esc(r.id)}" data-d="-1" aria-label="Fewer servings">−</button><output aria-live="polite">${sv}</output><button data-a="serv" data-id="${esc(r.id)}" data-d="1" aria-label="More servings">+</button></div></div>
@@ -689,7 +689,7 @@ function vRecipe(id){
     ${r.store?`<div><dt>Storage &amp; reheating</dt><dd>${esc(r.store)}</dd></div>`:""}
     <div><dt>Allergen check</dt><dd>${al.length?"Contains: "+esc(al.join(", "))+". ":"No common allergens spotted. "}Always check product labels.</dd></div>
     ${r.swaps?`<div><dt>Low FODMAP swaps &amp; tips</dt><dd>${esc(r.swaps)}</dd></div>`:""}
-    <div><dt>How often</dt><dd>${r.freq==="Daily"?"Daily — balanced and nourishing, great any day.":r.freq==="Weekly"?"Weekly — richer or less complete; lovely as part of a varied week.":"Once in a while — a treat. Enjoy it!"}</dd></div>
+    <div><dt>How often</dt><dd>${r.freq==="Daily"?"Daily, balanced and nourishing, great any day.":r.freq==="Weekly"?"Weekly, richer or less complete; lovely as part of a varied week.":"Once in a while, a treat. Enjoy it!"}</dd></div>
   </dl></div>
   ${ingOpts.length?`<div class="panel tq"><h3>${ic("tag")}Find a supermarket special</h3>
   <select data-in="shopq" aria-label="Ingredient to search">${ingOpts.map(i=>{const q=shopQuery(i[2]);return `<option value="${esc(q)}" ${q===firstQ?"selected":""}>${esc(i[2])}${isHave(nkey(i[2]))?" (have)":""}</option>`}).join("")}</select>
@@ -781,7 +781,7 @@ function vShopping(){
   <div class="seg" role="group" aria-label="Preferred supermarket" style="margin:4px 0 10px">${["woolworths","coles","aldi"].map(s=>`<button class="${S.store===s?"on n":""}" data-a="store" data-s="${s}" aria-pressed="${S.store===s}">${STORES[s][0]}</button>`).join("")}</div>
   <a class="btn sm" href="${SPECIALS[S.store]}" target="_blank" rel="noopener">${ic("link")}This week’s ${STORES[S.store][0]} specials</a></div>
   ${items.length?`<div class="chips" style="padding-top:14px" role="group" aria-label="Show">${[["need","To buy"],["have","Have at home"],["all","Everything"]].map(([v,l])=>`<button class="chip${UI.shopView===v?" on":""}" data-a="shopView" data-v="${v}" aria-pressed="${UI.shopView===v}">${l}</button>`).join("")}</div>`:""}
-  ${items.length?(groups||`<div class="empty-st">${UI.shopView==="need"?"Nothing left to buy — nice!":"Nothing here."}</div>`):`<div class="empty-st">Your list builds itself from the planner.<br><br><a class="btn" href="#planner">${ic("cal")}Plan some meals</a></div>`}
+  ${items.length?(groups||`<div class="empty-st">${UI.shopView==="need"?"Nothing left to buy, nice!":"Nothing here."}</div>`):`<div class="empty-st">Your list builds itself from the planner.<br><br><a class="btn" href="#planner">${ic("cal")}Plan some meals</a></div>`}
   <div class="sec"><label class="fl" for="addItem" style="margin-top:0">Add something else</label><div class="row" style="flex-wrap:nowrap"><input type="text" id="addItem" placeholder="e.g. Lactose-free milk"><button class="btn" data-a="addItem">Add</button></div></div>
   ${need.length?`<div class="row" style="padding:12px 18px"><button class="btn line" style="flex:1" data-a="copyList">${ic("copy")}Copy list to send</button>${Object.keys(bought).length?`<button class="btn line" data-a="resetBought">Untick all</button>`:""}</div>`:""}`;
 }
@@ -803,10 +803,10 @@ function vMore(){
   ${tile("finds","var(--tq)","link","Community finds","Recipe links you’ve found online")}
   ${tile("fodmap","var(--em)","info","What is FODMAP?","What the letters mean and which foods fit where")}
   ${tile("check","var(--ch)","leaf","Recipe checker","Paste ingredients, get low FODMAP swaps")}
-  ${tile("my","var(--em)","edit","My recipes","Add your own — with a low FODMAP check")}
+  ${tile("my","var(--em)","edit","My recipes","Add your own, with a low FODMAP check")}
   ${tile("favourites","var(--bl)","heart","Saved recipes","Your favourites")}
   ${tile("prefs","var(--bl)","gear","Household & settings","People, supermarket, sharing")}
-  ${tile("terms","var(--mut)","info","Terms & disclaimer","Not medical advice — please read")}
+  ${tile("terms","var(--mut)","info","Terms & disclaimer","Not medical advice, please read")}
   <p class="disc">Yes Chef! · Delicious food. Happy guts.</p>`;
 }
 function ownsFind(f){return IS_OWNER||!f.by||f.by===UID}
@@ -823,7 +823,7 @@ function vFinds(){
   <button class="btn tq full" data-a="addFind">${ic("plus")}Add a recipe link</button><a class="btn line full" style="margin-top:8px" href="#check">${ic("leaf")}Check a recipe for swaps</a></div>
   <div class="chips" role="group" aria-label="Meal">${[["all","All"]].concat(FCATS).map(([v,l])=>`<button class="chip${UI.fMeal===v?" on":""}" data-a="fMeal" data-v="${v}" aria-pressed="${UI.fMeal===v}">${l}</button>`).join("")}</div>
   <div class="chips" role="group" aria-label="Diet">${[["all","Any diet"],["veg","Vegetarian"],["vegan","Vegan"],["pesc","Pescatarian"]].map(([v,l])=>`<button class="chip${UI.fDiet===v?" on":""}" data-a="fDiet" data-v="${v}" aria-pressed="${UI.fDiet===v}">${l}</button>`).join("")}</div>
-  ${list.length?`<div class="grid">${list.map(fCard).join("")}</div>`:`<div class="empty-st">${FINDS.length?"Nothing matches those filters.":"No finds yet — add the first one!"}</div>`}<div style="height:12px"></div>`;
+  ${list.length?`<div class="grid">${list.map(fCard).join("")}</div>`:`<div class="empty-st">${FINDS.length?"Nothing matches those filters.":"No finds yet, add the first one!"}</div>`}<div style="height:12px"></div>`;
 }
 function findForm(f){
   const v=f||{url:"",title:"",author:"",meal:"D",diet:"any"};
@@ -835,7 +835,7 @@ function findForm(f){
   <label class="fl">Diet</label><div class="slotpick" style="grid-template-columns:repeat(2,minmax(0,1fr))" role="group">${[["any","Not specified"],["veg","Vegetarian"],["vegan","Vegan"],["pesc","Pescatarian"]].map(([d,l])=>`<button type="button" class="${d===(v.diet||"any")?"on":""}" data-a="fmPick" data-g="diet" data-v="${d}">${l}</button>`).join("")}</div>
   <input type="hidden" name="meal" value="${esc(v.meal||"D")}"><input type="hidden" name="diet" value="${esc(v.diet||"any")}">
   <label class="fl">Photo (optional)</label><span class="btn line sm fileov">${ic("camera")}<span id="fphl">${f&&f.photo?"Change photo":"Choose a photo"}</span><input type="file" accept="image/*" id="fphoto" aria-label="Choose a photo"></span>
-  <label class="fl" for="f-ing">Ingredients (optional — paste to check for high FODMAP foods)</label><textarea id="f-ing" name="ing" placeholder="Paste the ingredient list here">${esc(v.ing||"")}</textarea>
+  <label class="fl" for="f-ing">Ingredients (optional, paste to check for high FODMAP foods)</label><textarea id="f-ing" name="ing" placeholder="Paste the ingredient list here">${esc(v.ing||"")}</textarea>
   <button class="btn em full" style="margin-top:18px" type="submit">${ic("check")}${f?"Save changes":"Save find"}</button></form>`;
 }
 
@@ -859,8 +859,8 @@ function vForm(id){
   <div style="flex:1"><label class="fl" for="m-prep">Prep (min)</label><input type="number" id="m-prep" name="prep" min="0" value="${esc(v.prep)}"></div>
   <div style="flex:1"><label class="fl" for="m-cook">Cook (min)</label><input type="number" id="m-cook" name="cook" min="0" value="${esc(v.cook)}"></div></div>
   <label class="fl" for="m-freq">How often</label><select id="m-freq" name="freq">${opt([["Daily","Daily"],["Weekly","Weekly"],["Once in a while","Once in a while"]],v.freq)}</select>
-  <label class="fl" for="m-ing">Ingredients — one per line</label><textarea id="m-ing" name="ing" placeholder="500 g chicken thigh&#10;2 tbsp garlic-infused oil&#10;1 bunch spring onions, green tops only">${esc(v.ing)}</textarea>
-  <label class="fl" for="m-steps">Method — one step per line</label><textarea id="m-steps" name="steps" placeholder="Put a frying pan on medium heat with 1 tbsp oil.&#10;Add the chicken and cook 5 minutes.">${esc(v.steps)}</textarea>
+  <label class="fl" for="m-ing">Ingredients (one per line)</label><textarea id="m-ing" name="ing" placeholder="500 g chicken thigh&#10;2 tbsp garlic-infused oil&#10;1 bunch spring onions, green tops only">${esc(v.ing)}</textarea>
+  <label class="fl" for="m-steps">Method (one step per line)</label><textarea id="m-steps" name="steps" placeholder="Put a frying pan on medium heat with 1 tbsp oil.&#10;Add the chicken and cook 5 minutes.">${esc(v.steps)}</textarea>
   <label class="fl" for="m-equip">Equipment (comma separated)</label><input type="text" id="m-equip" name="equip" value="${esc(v.equip)}" placeholder="Frying pan, Wooden spoon">
   <label class="fl" for="m-store">Storage &amp; reheating</label><input type="text" id="m-store" name="store" value="${esc(v.store)}">
   <label class="fl" for="m-notes">Short description</label><input type="text" id="m-notes" name="notes" value="${esc(v.notes)}">
@@ -942,7 +942,7 @@ function drawCook(){
     body=`<div class="stepno">${stepNo}${p.sec?`<span class="sect">${esc(p.sec)}</span>`:""}</div><p class="big" style="margin-top:14px">${esc(p.text)}</p>
     ${p.min?`<div class="timer${t&&t.done?" done":""}">${ic("timer")}<span class="tv" data-tleft="${tid}">${t?(t.done?"Done!":mmss((t.end-Date.now())/1000)):mmss(p.min*60)}</span>${t?(t.done?`<button class="btn white" data-a="ckTimerClear" data-t="${tid}">OK</button>`:`<button class="btn lineW" data-a="ckTimerClear" data-t="${tid}">Stop</button>`):`<button class="btn white" data-a="ckTimer" data-t="${tid}" data-m="${p.min}">${ic("play")}Start ${fmtTime(p.min)} timer</button>`}</div>`:""}`;
   }else{
-    body=`<div class="stepno">Finished</div><h2>All done — enjoy!</h2>${r.store?`<p class="big" style="font-size:19px"><b>Storing leftovers:</b> ${esc(r.store)}</p>`:""}<p class="tip">Yes Chef! 🙌</p>`;
+    body=`<div class="stepno">Finished</div><h2>All done, enjoy!</h2>${r.store?`<p class="big" style="font-size:19px"><b>Storing leftovers:</b> ${esc(r.store)}</p>`:""}<p class="tip">Yes Chef! 🙌</p>`;
   }
   const running=CK.timers.filter(t=>!t.cleared);
   $("#cook").innerHTML=`<div class="cook" role="dialog" aria-modal="true" aria-label="Cook with me: ${esc(r.name)}">
@@ -973,7 +973,7 @@ document.addEventListener("change",async e=>{
     try{const d=await compress(t.files[0],900,.72);
       const url=await uploadPhoto(d,"recipe-"+id);
       if(isBuilt(id)){if(!IS_OWNER)return;const {error}=await SB.from("recipe_photos").upsert({recipe_id:id,url,updated_at:new Date().toISOString()});if(error)throw error;OFFICIAL[id]=url}
-      else{const {error}=await SB.from("household_photos").upsert({household_id:HH,recipe_id:id,url});if(error)throw error;PHOTOS[id]=url}toast("Photo added");render()}catch(err){if(err&&err.message)sbErr(err);else toast("Couldn’t read that photo — try a different one.")}
+      else{const {error}=await SB.from("household_photos").upsert({household_id:HH,recipe_id:id,url});if(error)throw error;PHOTOS[id]=url}toast("Photo added");render()}catch(err){if(err&&err.message)sbErr(err);else toast("Couldn’t read that photo, try a different one.")}
   }
   if(t.id==="fshots"&&t.files&&t.files.length){
     try{pendingShots=[];for(const fl of Array.from(t.files).slice(0,8)){pendingShots.push(await compress(fl,1400,.8))}
@@ -1007,18 +1007,18 @@ document.addEventListener("submit",async e=>{
         lsSet("yc-pending-terms",TERMS_V);
         if(!data.session){$("#app").innerHTML=`<div class="sec"><div class="panel tq"><h3>${ic("check")}Check your email</h3><p>We’ve sent a link to <b>${esc(email)}</b>. Tap it to finish creating your account, then come back here.</p></div></div>`;return}}
       else{const {error}=await SB.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;toast("Check your email for a reset link");UI.authMode="in";render();return}
-    }catch(e){toast(/Invalid login/i.test(e.message)?"Email or password is wrong.":/registered/i.test(e.message)?"That email already has an account — sign in instead.":/rate limit/i.test(e.message)?"Too many tries — wait a few minutes.":(e.message||"Something went wrong"))}
+    }catch(e){toast(/Invalid login/i.test(e.message)?"Email or password is wrong.":/registered/i.test(e.message)?"That email already has an account, sign in instead.":/rate limit/i.test(e.message)?"Too many tries, wait a few minutes.":(e.message||"Something went wrong"))}
     btn.disabled=false;return;
   }
   if(f.dataset.form==="newpw"){const {error}=await SB.auth.updateUser({password:fd.pw});if(error){toast(error.message);return}toast("Password updated");go("home");return}
   if(f.dataset.form==="join"){
     const code=(fd.code||"").trim().toUpperCase();if(code.length<4){toast("Enter the code");return}
-    const {error}=await SB.rpc("join_household",{code});if(error){toast(/match/.test(error.message)?"That code doesn’t match a household.":"Couldn’t join — try again.");return}
+    const {error}=await SB.rpc("join_household",{code});if(error){toast(/match/.test(error.message)?"That code doesn’t match a household.":"Couldn’t join, try again.");return}
     await loadAll();toast("Joined! Your planner and shopping list are now shared.");return;
   }
   if(f.dataset.form==="find"){
     let url=(fd.url||"").trim();if(url&&!/^https?:\/\//i.test(url))url="https://"+url;
-    if(!/^https?:\/\/[^\s.]+\.[^\s]+/i.test(url)){toast("That link doesn’t look right — paste the full web address.");return}
+    if(!/^https?:\/\/[^\s.]+\.[^\s]+/i.test(url)){toast("That link doesn’t look right, paste the full web address.");return}
     const editId=f.dataset.id||"",prev=editId?FINDS.find(x=>x.id===editId):null;
     if(editId&&(!prev||!ownsFind(prev))){toast("Only the person who added this can edit it.");return}
     const obj={url,title:(fd.title||"").trim().slice(0,140),author:(fd.author||"").trim().slice(0,80),meal:fd.meal||"D",diet:fd.diet||"any",photo:pendingFindPhoto||(prev&&prev.photo)||"",by:(prev&&prev.by)||UID,ing:String(fd.ing||"").slice(0,6000),t:prev?prev.t:Date.now()};
@@ -1057,9 +1057,9 @@ const A={
   copyNeeds:t=>{const r=getR(t.dataset.id);const f=getServ(r)/r.serves;
     const lines=(r.ing||[]).filter(i=>i[0]!=="#"&&i[3]!=="water"&&!i[6]&&!isHave(nkey(i[2]))).map(i=>"• "+(qtyText(i,f)?qtyText(i,f)+" ":"")+i[2]);
     if(!lines.length){toast("You have everything!");return}
-    copyText(r.name+" — shopping list\n"+lines.join("\n"))},
+    copyText(r.name+", shopping list\n"+lines.join("\n"))},
   cook:t=>openCook(t.dataset.id),
-  cookToday:()=>{const k=wkKey(new Date()),di=todayIdx(),p=weekPlan(k);const sl=p[di+"D"]||p[di+"L"]||p[di+"B"];if(sl&&sl.id&&getR(sl.id)){openCook(sl.id)}else{toast("Nothing planned today — pick a recipe and tap Cook with me");go("recipes")}},
+  cookToday:()=>{const k=wkKey(new Date()),di=todayIdx(),p=weekPlan(k);const sl=p[di+"D"]||p[di+"L"]||p[di+"B"];if(sl&&sl.id&&getR(sl.id)){openCook(sl.id)}else{toast("Nothing planned today, pick a recipe and tap Cook with me");go("recipes")}},
   addPlan:t=>openAddPlan(t.dataset.id),
   apWk:t=>{UI.ap.wk=wkKey(addDays(wkDate(UI.ap.wk),+t.dataset.d));apRender()},
   apDay:t=>{UI.ap.d=+t.dataset.i;apRender()},
@@ -1082,17 +1082,17 @@ const A={
   delExtra:t=>{const k=curWk();S.extras[k]=(S.extras[k]||[]).filter(x=>x.id!==t.dataset.id);save();render()},
   resetBought:()=>{S.bought[curWk()]={};save();render()},
   copyList:()=>{const k=curWk();const {items}=weekItems(k);const b=S.bought[k]||{};
-    const out=["Yes Chef! shopping list — week of "+dstr(wkDate(k))];
-    SHOPCAT.forEach(([c,l])=>{const its=items.filter(i=>(i.cat||"other")===c&&!isHave(i.key)&&!b[i.key]);if(!its.length)return;out.push("",l.toUpperCase());its.forEach(i=>{const q=partsText(i.parts);out.push("☐ "+cap(i.extra?i.name:nkey(i.name))+(q?" — "+q:""))})});
+    const out=["Yes Chef! shopping list, week of "+dstr(wkDate(k))];
+    SHOPCAT.forEach(([c,l])=>{const its=items.filter(i=>(i.cat||"other")===c&&!isHave(i.key)&&!b[i.key]);if(!its.length)return;out.push("",l.toUpperCase());its.forEach(i=>{const q=partsText(i.parts);out.push("☐ "+cap(i.extra?i.name:nkey(i.name))+(q?", "+q:""))})});
     copyText(out.join("\n"))},
   chkFind:t=>{const fi=FINDS.find(x=>x.id===t.dataset.id);if(!fi)return;openModal("Low FODMAP check",`<p style="margin:0 0 10px"><b>${esc(fi.title)}</b></p>${checkResults(fi.ing)}`)},
   runCheck:()=>{const ta=$("#chkText");const out=$("#chkOut");if(!ta||!out)return;UI.chk=ta.value;out.innerHTML=ta.value.trim()?checkResults(ta.value):'<p class="small muted">Paste some ingredients first.</p>';out.scrollIntoView({behavior:"smooth",block:"start"})},
-  acceptTerms:async()=>{lsSet("yc-terms-"+UID,TERMS_V);if(PROFILE)PROFILE.accepted_terms=TERMS_V;closeModal();toast("Thanks — enjoy cooking!");try{await SB.from("profiles").update({accepted_terms:TERMS_V}).eq("id",UID)}catch(e){}},
+  acceptTerms:async()=>{lsSet("yc-terms-"+UID,TERMS_V);if(PROFILE)PROFILE.accepted_terms=TERMS_V;closeModal();toast("Thanks, enjoy cooking!");try{await SB.from("profiles").update({accepted_terms:TERMS_V}).eq("id",UID)}catch(e){}},
   termsRead:()=>{lsSet("yc-terms-pending",1);closeModal();go("terms")},
   authMode:t=>{UI.authMode=t.dataset.v;render()},
   copyCode:()=>copyText(HOUSE&&HOUSE.invite_code||""),
-  newCode:async()=>{try{const {data,error}=await SB.rpc("new_household_code");if(error)throw error;HOUSE.invite_code=data;render();toast("New code made — the old one no longer works")}catch(e){sbErr(e)}},
-  leaveHouse:async t=>{if(!t.dataset.arm){t.dataset.arm=1;t.textContent="Tap again — you’ll get a fresh planner";setTimeout(()=>{if(t.isConnected){delete t.dataset.arm;t.textContent="Start my own household"}},4000);return}
+  newCode:async()=>{try{const {data,error}=await SB.rpc("new_household_code");if(error)throw error;HOUSE.invite_code=data;render();toast("New code made, the old one no longer works")}catch(e){sbErr(e)}},
+  leaveHouse:async t=>{if(!t.dataset.arm){t.dataset.arm=1;t.textContent="Tap again, you’ll get a fresh planner";setTimeout(()=>{if(t.isConnected){delete t.dataset.arm;t.textContent="Start my own household"}},4000);return}
     try{const {data,error}=await SB.rpc("leave_household");if(error)throw error;PROFILE.household_id=data;await loadAll();toast("You’re in your own household now")}catch(e){sbErr(e)}},
   signOut:async()=>{await SB.auth.signOut();teardown();go("home");render()},
   delAcct:(t)=>{openModal("Delete your account",`<p>To delete your account and everything you’ve added, email the app owner from the address you signed up with. We’ll delete it within 30 days.</p>`)},
