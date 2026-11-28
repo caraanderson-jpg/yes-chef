@@ -590,6 +590,30 @@ function render(){
 }
 
 /* ============ views ============ */
+function tipsFor(r){
+  const ing=(r.ing||[]).filter(i=>i[0]!=="#");const names=ing.map(i=>String(i[2]).toLowerCase());const all=names.join(" | ");
+  const has=re=>re.test(all);const qty=(re,unit)=>ing.filter(i=>re.test(String(i[2]).toLowerCase())&&(!unit||i[1]===unit)).reduce((t,i)=>t+(+i[0]||0),0);
+  const light=[];
+  if(has(/rice(?! paper| vinegar| wine| flour)|noodles|vermicelli|soba|pasta|spaghetti|orzo/)&&r.cat!=="baking")light.push("Serve a smaller scoop of rice, noodles or pasta (about ½ cup cooked each) and fill the rest of the bowl with extra greens like bok choy, spinach or zucchini. Saves around 100 to 150 cal.");
+  const oil=qty(/oil(?! spray)/,"tbsp");if(oil>=2)light.push("Use half the oil, or an oil spray. Every tablespoon of oil is about 120 cal, and a good non-stick pan needs very little.");
+  if(has(/beef mince|pork mince|lamb mince/))light.push("Choose lean or heart-smart mince. It saves around 60 cal per 100 g, and you can pour off any fat after browning.");
+  if(has(/chicken thigh/))light.push("Swap chicken thighs for chicken breast to save about 30 cal per 100 g.");
+  if(has(/cheddar|mozzarella|cheese|parmesan|halloumi|feta/)&&!has(/light mozzarella/))light.push("Use half the cheese and pick a strong one like parmesan or vintage cheddar, so a little still tastes cheesy.");
+  if(has(/mayo/))light.push("Swap half the mayo for lactose-free Greek yoghurt. Same creaminess, about half the calories.");
+  if(has(/coconut cream|coconut milk/)&&!has(/light coconut/))light.push("Use light coconut milk instead of regular, about 60% fewer calories.");
+  if(has(/(?<!sour )cream(?! cheese)/)&&!has(/coconut/))light.push("Use lactose-free light cream, or half cream and half lactose-free milk.");
+  if(has(/burger buns|sub rolls|baguette|sourdough|bread|wraps|tortillas/))light.push("Have it open-faced with one slice, or wrap it in big iceberg lettuce leaves instead of bread. Saves around 150 cal.");
+  if(has(/peanut butter|tahini|macadamia|peanuts|almonds/)&&!has(/powdered peanut/))light.push("Use powdered peanut butter, or halve the nuts and nut butters. They’re healthy but very calorie dense.");
+  if(has(/bacon/))light.push("Use short-cut bacon and trim the fat, or use half the amount.");
+  if(qty(/maple|sugar|honey/,"tbsp")>=1)light.push("Halve the maple syrup or sugar. Most recipes still taste great with less.");
+  if(has(/lactose-free milk|coconut-almond/)&&r.cat==="oats")light.push("Use unsweetened almond milk instead of milk. It has about a quarter of the calories.");
+  if(has(/dark chocolate|chocolate chips/))light.push("Use 85% dark chocolate. It’s richer, so a smaller piece satisfies.");
+  const sweet=r.cat==="oats"||r.cat==="baking";
+  const pool=sweet?[["blueberries","a handful of blueberries"],["strawberr","sliced strawberries"],["kiwi","a sliced kiwi fruit"],["chia","1 tsp chia seeds"],["hemp","1 tsp hemp seeds"],["pepitas|pumpkin seeds","a sprinkle of pepitas"],["sunflower","a sprinkle of sunflower seeds"],["cinnamon","a pinch of cinnamon"],["linseed","1 tsp ground linseed"],["raspberr","a few raspberries"]]
+   :[["spinach","a big handful of baby spinach (wilts straight in)"],["carrot","a grated carrot"],["zucchini","⅓ zucchini, grated or sliced"],["kale","a handful of torn kale"],["bok choy","a bok choy, sliced"],["green beans","a handful of green beans"],["capsicum","¼ red capsicum"],["cucumber","some sliced cucumber"],["rocket","a handful of rocket"],["eggplant","a few cubes of roast eggplant"],["broccoli","a few broccoli florets"],["bean sprouts","a handful of bean sprouts"],["tomato","a few cherry tomatoes"],["coriander|parsley|basil|mint","a handful of fresh herbs like parsley, basil or coriander"],["pepitas|pumpkin seeds","a sprinkle of pepitas"],["sesame","a sprinkle of sesame seeds"],["sunflower","a sprinkle of sunflower seeds"],["chives","chopped chives"]];
+  let sd=0;for(const ch of r.id)sd=(sd*31+ch.charCodeAt(0))%997;const av=pool.filter(([k])=>!new RegExp(k).test(all));const off=av.length?sd%av.length:0;const plants=av.slice(off).concat(av.slice(0,off)).slice(0,4).map(x=>x[1]);
+  return {light:light.slice(0,4),plants};
+}
 function kcalOf(r){if(!r||r.cat==="broth"||r.id==="sourdough-starter")return 0;return (window.YC_KCAL||{})[r.id]||0}
 function rCard(r){
   const p=plantsOf(r);
@@ -695,6 +719,7 @@ function vRecipe(id){
   <ul class="ilist">${ingHtml||'<li>No ingredients yet.</li>'}</ul>
   <div class="row" style="margin-top:12px"><button class="btn sm line" data-a="copyNeeds" data-id="${esc(r.id)}">${ic("copy")}Copy what I need (${needList.length})</button></div></div>
   ${r.ai&&r.fod?`<div class="panel tq"><h3>${ic("leaf")}Why it’s low FODMAP</h3><p class="small">${esc(r.fod)}</p>${r.swaps?`<p class="small"><b>Tips:</b> ${esc(r.swaps)}</p>`:""}</div>`:""}
+  ${(()=>{if(r.cat==="broth"||r.id==="sourdough-starter")return "";const tp=tipsFor(r);return `${tp.light.length?`<div class="panel white"><h3>${ic("leaf")}Make it lighter</h3>${tp.light.map(t=>`<p class="small" style="margin:6px 0 0">• ${esc(t)}</p>`).join("")}</div>`:""}${tp.plants.length?`<div class="panel tq"><h3>${ic("leaf")}Add more plants</h3><p class="small" style="margin:4px 0 6px">Every different plant counts toward your 30 a week. Try adding:</p>${tp.plants.map(t=>`<p class="small" style="margin:4px 0 0">• ${esc(t)}</p>`).join("")}<p class="small muted" style="margin:8px 0 0">All low FODMAP in these amounts.</p></div>`:""}`})()}
   ${flags.length?`<div class="panel warn"><h3>${ic("info")}Low FODMAP check</h3><p class="small">These ingredients may be high FODMAP. Suggested swaps:</p>${flags.map(x=>`<div class="flag"><b>${esc(x.line)}</b>${esc(x.issue)} <span class="muted">→ ${esc(x.swap)}</span></div>`).join("")}</div>`:(r.mine?`<div class="panel tq"><h3>${ic("check")}Low FODMAP check</h3><p class="small">No common high FODMAP ingredients spotted. Still check sauce and stock labels.</p></div>`:"")}
   <div class="panel white"><h3>${ic("pot")}Method</h3><ol class="steps">${stepHtml||"<li>No steps yet.</li>"}</ol>
   ${r.steps&&r.steps.length?`<button class="btn em full" style="margin-top:12px" data-a="cook" data-id="${esc(r.id)}">${ic("play")}Start Cook with me</button>`:""}</div>
