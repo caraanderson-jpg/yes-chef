@@ -176,7 +176,9 @@ function scanLine(l){
   if(/\bleeks?\b/.test(s)&&!/green/.test(s))add("The white part of leek is high in fructans.","Use the green leaves only.");
   if(/cauliflower/.test(s))add("Cauliflower is high in mannitol.","Swap for broccoli heads, Kent pumpkin or potato.");
   if(/mushroom/.test(s)&&!/oyster|canned|champignon/.test(s))add("Button, shiitake, enoki and portobello mushrooms are high in mannitol.","Use oyster mushrooms (75 g per serve).");
-  if(/cashew|pistachio/.test(s))add("Cashews and pistachios are high FODMAP.","Use macadamias, peanuts, walnuts or pecans.");
+  if(/pecan|walnut/.test(s))add("Avoid pecans and walnuts in Yes Chef! recipes.","Use macadamias, peanuts or pepitas.");
+  if(/coffee|espresso|mocha/.test(s))add("Coffee is left out of Yes Chef! recipes.","Leave it out, or add a pinch of cocoa or vanilla.");
+  if(/cashew|pistachio/.test(s))add("Cashews and pistachios are high FODMAP.","Use macadamias or peanuts.");
   if(/kidney bean|black bean|baked bean|borlotti|cannellini|split pea|butter bean/.test(s))add("Most beans are high in GOS.","Use canned, rinsed lentils (about 46 g per serve).");
   if(/lentil/.test(s)&&!/can|tin/.test(s))add("Boiled dried lentils are higher in GOS.","Use canned lentils, rinsed (about 46 g per serve).");
   if(/chickpea/.test(s)&&!/can|tin/.test(s))add("Dried chickpeas are high in GOS.","Use canned, rinsed chickpeas in small serves.");

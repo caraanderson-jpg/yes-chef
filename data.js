@@ -221,7 +221,7 @@ ing:[
 steps:[
 ["#","Pack it (prep day)"],
 ["Finely slice the green tops of 2 spring onions. Put them in a bowl with 300 g pork mince, 1 tsp ginger, 1 tbsp soy sauce, 1 tsp sesame oil, 1 tbsp cornflour and ¼ tsp white pepper."],
-["Mix with clean hands for 1 minute until sticky. Roll walnut-sized balls (about 14) onto a tray lined with baking paper. Pack into a container labelled MEAT. Wash your hands.",1],
+["Mix with clean hands for 1 minute until sticky. Roll golf-ball-sized balls (about 14) onto a tray lined with baking paper. Pack into a container labelled MEAT. Wash your hands.",1],
 ["Peel the 100 g daikon and slice it into thin half-moons. Trim the ends off 75 g green beans. Peel the carrot and slice into thin coins. Strip 60 g kale leaves off the stems and tear them up."],
 ["Cut 150 g wombok into 4 cm pieces, halve 2 bok choy, tear 150 g oyster mushrooms. Pack all the veg in a container labelled VEG."],
 ["Sauce jar: 3 tbsp soy sauce, 1 tbsp rice vinegar, 1 tsp garlic-infused oil, sliced chilli and 1 tbsp sesame seeds."],
@@ -418,15 +418,15 @@ ing:[
 [2,"tbsp","smooth peanut butter","pantry","peanut","1 tbsp per jar"],
 [2,"tsp","maple syrup","pantry"],
 [1,"","firm banana","veg","banana","Firm (not spotty) bananas are low FODMAP; ripe ones are high in fructans"],
-[2,"tbsp","walnuts, chopped","pantry","walnut"]],
+[2,"tbsp","macadamias, chopped","pantry","macadamia"]],
 steps:[
 ["Into each jar put: 50 g (½ cup) oats, 1 tbsp chia seeds, 1 tbsp hemp seeds and 1 tsp cacao powder."],
 ["Add to each jar: 150 ml almond milk, 1 tbsp peanut butter and 1 tsp maple syrup."],
 ["Stir really well until the peanut butter is mixed through."],
 ["Slice the banana. Put half on top of each jar. Lids on, fridge overnight."],
-["Morning: stir, add a splash of milk if needed, top with 1 tbsp chopped walnuts each."]],
-fod:"Firm banana is low FODMAP; ripe banana is high in fructans. Peanut butter and walnuts are low at these serves.",
-swaps:"Nut-free: swap walnuts for sunflower seeds and peanut butter for sunflower seed butter.",
+["Morning: stir, add a splash of milk if needed, top with 1 tbsp chopped macadamias each."]],
+fod:"Firm banana is low FODMAP; ripe banana is high in fructans. Peanut butter and macadamias are low at these serves.",
+swaps:"Nut-free: swap macadamias for sunflower seeds and peanut butter for sunflower seed butter.",
 store:"Fridge up to 2 days (banana browns after that, add it fresh in the morning instead)."},
 
 {id:"oats-tropical",name:"Tropical Kiwi, Pineapple & Coconut Overnight Oats",by:"yc",cat:"oats",meals:["B"],diet:"vegan",freq:"Daily",serves:2,prep:8,cook:0,
@@ -477,7 +477,7 @@ swaps:"Swap strawberries for raspberries (about 30 berries each).",
 store:"Fridge up to 3 days (add strawberries on the day for best texture)."},
 
 {id:"oats-carrot-cake",name:"Carrot Cake Overnight Oats",by:"yc",cat:"oats",meals:["B"],diet:"veg",freq:"Daily",serves:2,prep:8,cook:0,
-desc:"Warm spices, grated carrot and pecans, sneaks a vegetable into breakfast.",
+desc:"Warm spices, grated carrot and crunchy pepitas, sneaks a vegetable into breakfast.",
 equip:"2 jars or containers with lids, Grater, Measuring cups and spoons",
 ing:[
 [100,"g","rolled oats","pantry","oats"],
@@ -490,14 +490,14 @@ ing:[
 [250,"ml","lactose-free milk or almond milk","dairy"],
 [120,"g","lactose-free Greek-style yoghurt","dairy"],
 [3,"tsp","maple syrup","pantry"],
-[10,"","pecan halves","pantry","pecan"]],
+[2,"tbsp","pumpkin seeds (pepitas)","pantry","pepita"]],
 steps:[
 ["Peel and finely grate the small carrot."],
 ["Into each jar: 50 g oats, 1 tbsp chia, 1 tbsp hemp seeds, ½ tsp cinnamon, a pinch of nutmeg and a pinch of ginger."],
 ["Add half the grated carrot, 125 ml milk, 60 g yoghurt and 1½ tsp maple syrup to each. Stir well. Lids on, fridge overnight."],
-["Morning: chop 5 pecans over each jar."]],
-fod:"Carrots contain no detectable FODMAPs. Pecans are low at 10 halves per serve, this is 5 each.",
-swaps:"Walnuts instead of pecans. Dairy-free: almond milk and coconut yoghurt.",
+["Morning: sprinkle 1 tbsp pepitas over each jar."]],
+fod:"Carrots contain no detectable FODMAPs. Pumpkin seeds are low FODMAP at this serve.",
+swaps:"Macadamias instead of pepitas. Dairy-free: almond milk and coconut yoghurt.",
 store:"Fridge up to 3 days."},
 
 /* ───────────── CARA'S RECIPES (converted) ───────────── */
@@ -1455,9 +1455,8 @@ desc:"Crunchy nuts and seeds under a layer of melted dark chocolate with a pinch
 equip:"Medium baking dish or tray (about 20 × 25 cm), Baking paper, Spatula, Sharp knife, Freezer",
 ing:[
 [40,"g","macadamias","pantry","macadamia"],
-[40,"g","pecans","pantry","pecan"],
-[30,"g","walnuts","pantry","walnut"],
-[30,"g","roasted peanuts","pantry","peanut"],
+[70,"g","roasted peanuts","pantry","peanut"],
+[30,"g","extra macadamias","pantry","macadamia"],
 [20,"g","hazelnuts","pantry","hazelnut"],
 [20,"g","almonds","pantry","almond"],
 [2,"tbsp","pumpkin seeds (pepitas)","pantry","pepita"],
@@ -1474,7 +1473,7 @@ steps:[
 ["Take it out. Gently spread the chocolate with a spatula so it covers the nuts. Sprinkle with sea salt."],
 ["Put it in the freezer for 20–25 minutes to set.",25],
 ["Lift the slab out by the paper and cut into 12 pieces."]],
-fod:"Macadamias, pecans, walnuts, peanuts, pumpkin and sunflower seeds have generous low FODMAP serves; hazelnuts, almonds and sultanas are kept small. One piece has about 17 g dark chocolate (low up to about 30 g).",
+fod:"Macadamias, peanuts, pumpkin and sunflower seeds have generous low FODMAP serves; hazelnuts, almonds and sultanas are kept small. One piece has about 17 g dark chocolate (low up to about 30 g).",
 swaps:"Leave out the sultanas for a lower-sugar version. Add 1 tbsp desiccated coconut or a little orange zest.",
 store:"Airtight container in the fridge for up to 2 weeks."}
 ,
@@ -2466,7 +2465,7 @@ steps:[
 ["Spoon into 5 small glasses. Chill at least 2 hours until set.",120],
 ["Top with a few berries and a dusting of cocoa."]],
 fod:"Firm tofu is used because silken tofu is high FODMAP. Dark chocolate is kept to 30 g per serve, and almond milk and maple syrup are low FODMAP.",
-swaps:"Add a pinch of chilli, ½ tsp instant coffee or orange zest. Pour into a gluten-free tart shell for a chocolate tart.",
+swaps:"Add a pinch of chilli or some orange zest. Pour into a gluten-free tart shell for a chocolate tart.",
 store:"Fridge 4 days, covered."}
 ,
 
@@ -3219,7 +3218,7 @@ swaps:"Use chicken thigh instead of tofu, and lactose-free cream instead of coco
 store:"Fridge 4 days. The sauce freezes well."},
 
 {id:"pumpkin-sage-pasta",name:"Creamy Pumpkin & Sage Pasta",by:"yc",cat:"dinner",meals:["D","L"],diet:"vegan",freq:"Weekly",serves:4,prep:15,cook:30,
-desc:"Silky roasted pumpkin and sage sauce over pasta with crispy kale, broccoli, crunchy walnuts and a tahini drizzle.",
+desc:"Silky roasted pumpkin and sage sauce over pasta with crispy kale, broccoli, toasted pepitas and a tahini drizzle.",
 equip:"Baking tray, Baking paper, Blender, Large saucepan, Frying pan, Knife, Chopping board",
 ing:[
 [300,"g","Kent pumpkin, cubed","veg","pumpkin","75 g each"],
@@ -3232,7 +3231,7 @@ ing:[
 [320,"g","gluten-free spaghetti","noodle","rice"],
 [300,"g","broccoli heads, small florets","veg","broccoli","75 g each"],
 [2,"handfuls","kale, torn","veg","kale"],
-[40,"g","walnuts, chopped","pantry","walnut"],
+[3,"tbsp","pumpkin seeds (pepitas)","pantry","pepita"],
 ["#","Tahini drizzle"],
 [2,"tbsp","tahini","pantry","sesame"],
 [1,"tbsp","lemon juice","veg","~lemon"],
@@ -3241,9 +3240,9 @@ steps:[
 ["Turn the oven on to 210°C. Toss the pumpkin with 1 tbsp garlic oil and salt on a lined tray. Roast 25 minutes until soft.",25],
 ["Cook the spaghetti in salted boiling water following the packet. Add the broccoli for the last 2 minutes. Drain."],
 ["Blend the roasted pumpkin, tofu, nutritional yeast, almond milk, lemon juice and salt until silky."],
-["Put the frying pan on MEDIUM with 1 tbsp garlic oil. Fry the sage leaves 1 minute until crisp. Lift out. Add the kale and walnuts and toss 2 minutes.",3],
+["Put the frying pan on MEDIUM with 1 tbsp garlic oil. Fry the sage leaves 1 minute until crisp. Lift out. Add the kale and pepitas and toss 2 minutes.",3],
 ["Toss the pasta and broccoli with the pumpkin sauce. Add a splash of pasta water if it’s too thick."],
-["Mix the tahini, lemon juice and water. Top the pasta with kale, walnuts, crispy sage and a drizzle of tahini."]],
+["Mix the tahini, lemon juice and water. Top the pasta with kale, pepitas, crispy sage and a drizzle of tahini."]],
 fod:"Kent pumpkin is 75 g per serve (butternut is higher in FODMAPs). Blended firm tofu, almond milk and gluten-free pasta keep it creamy, high protein and low FODMAP.",
 swaps:"Add 30 g crumbled feta per serve for a vegetarian version.",
 store:"Fridge 3 days. Loosen with a splash of water when reheating."}
@@ -3521,7 +3520,7 @@ window.YC_GUIDE = [
 ["Chongqing / Sichuan hot pot bases","Usually contain garlic and broad bean paste","Check the label, or use the homemade mala base."],
 ["Bought fish balls & fish cakes","Often contain onion, garlic or wheat","Check the label, or make the Ginger Fish Balls."],
 ["Cauliflower","High (mannitol)","Swap for broccoli heads, Kent pumpkin or potato."],
-["Cashews & pistachios","High (GOS / fructans)","Swap for macadamias, peanuts, walnuts or pecans."],
+["Cashews & pistachios","High (GOS / fructans)","Swap for macadamias or peanuts."],
 ["Kidney beans","High (GOS)","Canned, rinsed lentils are low at about 46 g."],
 ["Avocado","Low at about 30 g","Bigger serves are high in sorbitol."],
 ["Milk, yoghurt & soft cheeses","High in lactose at normal serves","Lactose-free versions are low. Hard cheeses (cheddar, parmesan) are naturally very low in lactose."],
