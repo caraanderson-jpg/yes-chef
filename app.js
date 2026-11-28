@@ -56,7 +56,7 @@ function tipCard(t,big){
   <div class="tf">${evBadge(t.ev)}<a href="${esc(t.url)}" target="_blank" rel="noopener">Read the research →</a></div>
   <div class="ts">${esc(t.src)}</div></article>`;
 }
-const CATN={hotpot:"Hot pot",ramen:"Ramen",broth:"Broth & bases",oats:"Overnight oats",dinner:"Dinner",side:"Lunch & sides",sandwich:"Wraps, burgers & sandwiches",baking:"Baking",lunch:"Lunch",breakfast:"Breakfast",other:"Recipe"};
+const CATN={hotpot:"Hot pot",ramen:"Ramen & noodle soups",broth:"Broth & bases",oats:"Overnight oats",dinner:"Dinner",side:"Lunch & sides",sandwich:"Wraps, burgers & sandwiches",baking:"Baking & treats",lunch:"Lunch",breakfast:"Breakfast",other:"Recipe"};
 const DIETN={meat:"Meat",pesc:"Pescatarian",veg:"Vegetarian",vegan:"Vegan"};
 const SHOPCAT=[["veg","Fruit & Vegetables"],["meat","Meat & Seafood"],["dairy","Dairy, Eggs & Tofu"],["noodle","Rice, Pasta & Noodles"],["pantry","Pantry"],["herb","Herbs & Spices"],["frozen","Frozen"],["other","Other"]];
 const SLOTS=[["B","Breakfast"],["L","Lunch"],["D","Dinner"]];
@@ -627,11 +627,23 @@ function vHome(){
   <p class="disc">Low FODMAP serves are based on published Monash University and FODMAP Friendly data. Everyone’s tolerance is different, check the Monash FODMAP app and your dietitian.</p>`;
 }
 
-const CHIPS=[["all","All"],["fav","Saved"],["hotpot","Hot pots"],["ramen","Ramen"],["oats","Overnight oats"],["broth","Broths & bases"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Wraps, burgers & sandwiches"],["quick","Quick (under 20 min)"],["baking","Baking"],["mine","My recipes"],["veg","Vegetarian"],["vegan","Vegan"],["pesc","Pescatarian"]];
+const CHIPS=[["all","All"],["fav","Saved"],["hotpot","Hot pots"],["breakfast","Breakfast"],["ramen","Ramen & noodle soups"],["oats","Overnight oats"],["broth","Broths & bases"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Wraps, burgers & sandwiches"],["quick","Quick (under 20 min)"],["baking","Baking & treats"],["mine","My recipes"],["veg","Vegetarian"],["vegan","Vegan"],["pesc","Pescatarian"]];
+const NOODLE_SOUPS=["red-curry-wonton-soup","taiwanese-beef-noodle-soup","danzai-noodles","laksa-noodle-bowl","chicken-coconut-soup"];
+const TREATS=["fruit-nut-bark","strawberry-cheesecake-ice-cream","tofu-chocolate-mousse","choc-pb-energy-bites"];
+function rcats(r){
+  const c=new Set([r.cat]);const m=r.meals||[];const n=(r.name||"").toLowerCase();
+  if(m.includes("B")&&!["sourdough-starter","spelt-sourdough","strawberry-cheesecake-ice-cream"].includes(r.id))c.add("breakfast");
+  if(m.includes("L")&&r.cat!=="baking"&&r.cat!=="broth")c.add("side");
+  if(m.includes("D")&&!["oats","baking","broth"].includes(r.cat))c.add("dinner");
+  if(/burger|wrap|sandwich|toastie|\bsubs?\b|banh mi|quesadilla|pocket|melt\b|blat/.test(n))c.add("sandwich");
+  if(NOODLE_SOUPS.includes(r.id))c.add("ramen");
+  if(TREATS.includes(r.id))c.add("baking");
+  return c;
+}
 function matchChip(r,c){
   if(c==="all")return true;if(c==="fav")return !!S.favs[r.id];if(c==="cara")return r.by==="cara";if(c==="mine")return !!r.mine;if(c==="quick")return (+r.prep||0)+(+r.cook||0)<=20&&(r.steps||[]).reduce((t,s)=>t+(+s[1]||0),0)<=30&&r.cat!=="broth";
   if(c==="veg")return r.diet==="veg"||r.diet==="vegan";if(c==="vegan")return r.diet==="vegan";if(c==="pesc")return r.diet==="pesc";
-  return r.cat===c;
+  return rcats(r).has(c);
 }
 function recipeList(){
   const q=UI.q.trim().toLowerCase();
@@ -728,7 +740,7 @@ function pickerBody(k,slot){
   const sl=weekPlan(k)[slot]||{};const s=slot.slice(-1);
   if(UI.pickChip===null)UI.pickChip="all";
   const sName=SLOTS.find(x=>x[0]===s)[1];
-  const pc=[["all","All recipes"],["hotpot","Hot pots"],["ramen","Ramen"],["oats","Oats"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Burgers & sandwiches"],["quick","Quick"],["baking","Baking"],["broth","Broths"],["mine","Mine"],["fav","Saved"]];
+  const pc=[["all","All recipes"],["breakfast","Breakfast"],["hotpot","Hot pots"],["ramen","Noodle soups"],["oats","Oats"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Burgers & sandwiches"],["quick","Quick"],["baking","Baking"],["broth","Broths"],["mine","Mine"],["fav","Saved"]];
   const q=UI.pickQ.toLowerCase();
   const list=allRecipes().filter(r=>(q?true:(UI.pickChip==="suggest"?(r.meals||[]).includes(s):matchChip(r,UI.pickChip)))&&(!q||r.name.toLowerCase().includes(q)));
   const serv=sl.s||S.people;
