@@ -590,9 +590,10 @@ function render(){
 }
 
 /* ============ views ============ */
+function kcalOf(r){if(!r||r.cat==="broth"||r.id==="sourdough-starter")return 0;return (window.YC_KCAL||{})[r.id]||0}
 function rCard(r){
   const p=plantsOf(r);
-  return `<a class="rcard" href="#recipe-${esc(r.id)}">${cover(r)}<div class="meta"><h3>${esc(r.name)}</h3><div class="sub">${r.prep+r.cook?fmtTime(r.prep+r.cook)+" · ":""}Serves ${r.serves}${p.big.size?" · "+p.big.size+" plant"+(p.big.size>1?"s":""):""}</div><span class="tag ${r.diet}">${DIETN[r.diet]||""}</span>${S.favs[r.id]?`<span class="tag">♥ Saved</span>`:""}${starsView(r.id)}</div></a>`;
+  return `<a class="rcard" href="#recipe-${esc(r.id)}">${cover(r)}<div class="meta"><h3>${esc(r.name)}</h3><div class="sub">${r.prep+r.cook?fmtTime(r.prep+r.cook)+" · ":""}Serves ${r.serves}${p.big.size?" · "+p.big.size+" plant"+(p.big.size>1?"s":""):""}${kcalOf(r)?" · ≈"+kcalOf(r)+" cal":""}</div><span class="tag ${r.diet}">${DIETN[r.diet]||""}</span>${S.favs[r.id]?`<span class="tag">♥ Saved</span>`:""}${starsView(r.id)}</div></a>`;
 }
 function fmtTime(m){if(!m)return "";if(m<60)return m+" min";if(m>=1440&&m%1440===0){const d=m/1440;return d+(d>1?" days":" day")}const h=Math.floor(m/60),mm=m%60;return h+" hr"+(mm?" "+mm+" min":"")}
 
@@ -682,7 +683,7 @@ function vRecipe(id){
   <div style="position:relative">${cover(r,true)}${canPhoto(r)?`<span class="btn sm white photo-btn fileov">${ic("camera")}${photoOf(r.id)?"Change photo":"Add photo"}<input type="file" accept="image/*" data-photo="${esc(r.id)}" aria-label="Add photo"></span>`:""}</div>
   <div class="rhead ${hc}"><span class="kicker">${esc(CATN[r.cat]||"Recipe")}</span>
   <h1>${esc(r.name)}</h1>${r.desc?`<p>${esc(r.desc)}</p>`:""}
-  <div class="stats">${r.prep?`<span>${ic("clock")}Prep ${fmtTime(r.prep)}</span>`:""}${r.cook?`<span>${ic("pot")}Cook ${fmtTime(r.cook)}</span>`:""}<span>${ic("users")}Serves ${r.serves}</span>${pl.big.size?`<span>${ic("leaf")}${pl.big.size} plant${pl.big.size>1?"s":""}${pl.small.size?" + "+pl.small.size+" herbs/spices":""}</span>`:""}</div>
+  <div class="stats">${r.prep?`<span>${ic("clock")}Prep ${fmtTime(r.prep)}</span>`:""}${r.cook?`<span>${ic("pot")}Cook ${fmtTime(r.cook)}</span>`:""}<span>${ic("users")}Serves ${r.serves}</span>${kcalOf(r)?`<span title="Estimated from the ingredients">≈ ${kcalOf(r)} cal per serve</span>`:""}${pl.big.size?`<span>${ic("leaf")}${pl.big.size} plant${pl.big.size>1?"s":""}${pl.small.size?" + "+pl.small.size+" herbs/spices":""}</span>`:""}</div>
   <div class="row" style="margin-bottom:12px"><span class="tag ${r.diet}" style="margin:0">${DIETN[r.diet]||""}</span><span class="tag f-${r.freq.split(" ")[0]}" style="margin:0">${esc(r.freq)}</span></div>
   ${r.steps&&r.steps.length?`<button class="btn cookbtn" data-a="cook" data-id="${esc(r.id)}">${ic("play")}Cook with me</button>`:""}
   <div class="row" style="margin-top:10px"><button class="btn white" style="flex:1" data-a="addPlan" data-id="${esc(r.id)}">${ic("cal")}Add to planner</button><button class="btn ${S.favs[r.id]?"white":"lineW"}" data-a="fav" data-id="${esc(r.id)}" aria-pressed="${!!S.favs[r.id]}" aria-label="${S.favs[r.id]?"Saved, tap to remove":"Save to favourites"}" style="width:56px;padding:0">${ic("heart")}</button></div>
