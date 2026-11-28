@@ -637,7 +637,7 @@ function rcats(r){
   if(m.includes("B")&&!["sourdough-starter","spelt-sourdough","strawberry-cheesecake-ice-cream"].includes(r.id))c.add("breakfast");
   if(m.includes("L")&&r.cat!=="baking"&&r.cat!=="broth")c.add("side");
   if(m.includes("D")&&!["oats","baking","broth"].includes(r.cat))c.add("dinner");
-  if(/burger|wrap|sandwich|toastie|\bsubs?\b|banh mi|quesadilla|pocket|melt\b|blat/.test(n))c.add("sandwich");
+  if(/burger|wrap|lettuce|san choy|sandwich|toastie|\bsubs?\b|banh mi|quesadilla|pocket|melt\b|blat/.test(n))c.add("sandwich");
   if(NOODLE_SOUPS.includes(r.id))c.add("ramen");
   if(TREATS.includes(r.id))c.add("baking");
   return c;
@@ -742,7 +742,7 @@ function pickerBody(k,slot){
   const sl=weekPlan(k)[slot]||{};const s=slot.slice(-1);
   if(UI.pickChip===null)UI.pickChip="all";
   const sName=SLOTS.find(x=>x[0]===s)[1];
-  const pc=[["all","All recipes"],["breakfast","Breakfast"],["hotpot","Hot pots"],["ramen","Noodle soups"],["oats","Oats"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Burgers & sandwiches"],["quick","Quick"],["baking","Baking"],["broth","Broths"],["mine","Mine"],["fav","Saved"]];
+  const pc=[["all","All recipes"],["breakfast","Breakfast"],["hotpot","Hot pots"],["ramen","Noodle soups"],["oats","Oats"],["dinner","Dinners"],["side","Lunch & sides"],["sandwich","Wraps, burgers & sandwiches"],["quick","Quick"],["baking","Baking"],["broth","Broths"],["mine","Mine"],["fav","Saved"]];
   const q=UI.pickQ.toLowerCase();
   const list=allRecipes().filter(r=>(q?true:(UI.pickChip==="suggest"?(r.meals||[]).includes(s):matchChip(r,UI.pickChip)))&&(!q||r.name.toLowerCase().includes(q)));
   const serv=sl.s||S.people;
