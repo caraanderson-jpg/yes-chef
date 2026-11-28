@@ -591,28 +591,54 @@ function render(){
 
 /* ============ views ============ */
 function tipsFor(r){
-  const ing=(r.ing||[]).filter(i=>i[0]!=="#");const names=ing.map(i=>String(i[2]).toLowerCase());const all=names.join(" | ");
-  const has=re=>re.test(all);const qty=(re,unit)=>ing.filter(i=>re.test(String(i[2]).toLowerCase())&&(!unit||i[1]===unit)).reduce((t,i)=>t+(+i[0]||0),0);
-  const light=[];
-  if(has(/rice(?! paper| vinegar| wine| flour)|noodles|vermicelli|soba|pasta|spaghetti|orzo/)&&r.cat!=="baking")light.push("Serve a smaller scoop of rice, noodles or pasta (about ½ cup cooked each) and fill the rest of the bowl with extra greens like bok choy, spinach or zucchini. Saves around 100 to 150 cal.");
-  const oil=qty(/oil(?! spray)/,"tbsp");if(oil>=2)light.push("Use half the oil, or an oil spray. Every tablespoon of oil is about 120 cal, and a good non-stick pan needs very little.");
-  if(has(/beef mince|pork mince|lamb mince/))light.push("Choose lean or heart-smart mince. It saves around 60 cal per 100 g, and you can pour off any fat after browning.");
-  if(has(/chicken thigh/))light.push("Swap chicken thighs for chicken breast to save about 30 cal per 100 g.");
-  if(has(/cheddar|mozzarella|cheese|parmesan|halloumi|feta/)&&!has(/light mozzarella/))light.push("Use half the cheese and pick a strong one like parmesan or vintage cheddar, so a little still tastes cheesy.");
-  if(has(/mayo/))light.push("Swap half the mayo for lactose-free Greek yoghurt. Same creaminess, about half the calories.");
-  if(has(/coconut cream|coconut milk/)&&!has(/light coconut/))light.push("Use light coconut milk instead of regular, about 60% fewer calories.");
-  if(has(/(?<!sour )cream(?! cheese)/)&&!has(/coconut/))light.push("Use lactose-free light cream, or half cream and half lactose-free milk.");
-  if(has(/burger buns|sub rolls|baguette|sourdough|bread|wraps|tortillas/))light.push("Have it open-faced with one slice, or wrap it in big iceberg lettuce leaves instead of bread. Saves around 150 cal.");
-  if(has(/peanut butter|tahini|macadamia|peanuts|almonds/)&&!has(/powdered peanut/))light.push("Use powdered peanut butter, or halve the nuts and nut butters. They’re healthy but very calorie dense.");
-  if(has(/bacon/))light.push("Use short-cut bacon and trim the fat, or use half the amount.");
-  if(qty(/maple|sugar|honey/,"tbsp")>=1)light.push("Halve the maple syrup or sugar. Most recipes still taste great with less.");
-  if(has(/lactose-free milk|coconut-almond/)&&r.cat==="oats")light.push("Use unsweetened almond milk instead of milk. It has about a quarter of the calories.");
-  if(has(/dark chocolate|chocolate chips/))light.push("Use 85% dark chocolate. It’s richer, so a smaller piece satisfies.");
-  const sweet=r.cat==="oats"||r.cat==="baking";
-  const pool=sweet?[["blueberries","a handful of blueberries"],["strawberr","sliced strawberries"],["kiwi","a sliced kiwi fruit"],["chia","1 tsp chia seeds"],["hemp","1 tsp hemp seeds"],["pepitas|pumpkin seeds","a sprinkle of pepitas"],["sunflower","a sprinkle of sunflower seeds"],["cinnamon","a pinch of cinnamon"],["linseed","1 tsp ground linseed"],["raspberr","a few raspberries"]]
-   :[["spinach","a big handful of baby spinach (wilts straight in)"],["carrot","a grated carrot"],["zucchini","⅓ zucchini, grated or sliced"],["kale","a handful of torn kale"],["bok choy","a bok choy, sliced"],["green beans","a handful of green beans"],["capsicum","¼ red capsicum"],["cucumber","some sliced cucumber"],["rocket","a handful of rocket"],["eggplant","a few cubes of roast eggplant"],["broccoli","a few broccoli florets"],["bean sprouts","a handful of bean sprouts"],["tomato","a few cherry tomatoes"],["coriander|parsley|basil|mint","a handful of fresh herbs like parsley, basil or coriander"],["pepitas|pumpkin seeds","a sprinkle of pepitas"],["sesame","a sprinkle of sesame seeds"],["sunflower","a sprinkle of sunflower seeds"],["chives","chopped chives"]];
-  let sd=0;for(const ch of r.id)sd=(sd*31+ch.charCodeAt(0))%997;const av=pool.filter(([k])=>!new RegExp(k).test(all));const off=av.length?sd%av.length:0;const plants=av.slice(off).concat(av.slice(0,off)).slice(0,4).map(x=>x[1]);
-  return {light:light.slice(0,4),plants};
+  const ing=(r.ing||[]).filter(i=>i[0]!=="#");const s=r.serves||1;
+  const L=i=>String(i[2]).toLowerCase();const all=ing.map(L).join(" | ")+" | "+String(r.name).toLowerCase();
+  const find=re=>ing.filter(i=>re.test(L(i)));
+  const tbsp=i=>{const q=+i[0]||0,u=i[1];return u==="tbsp"?q:u==="tsp"?q/3:u==="cup"||u==="cups"?q*16:u==="ml"?q/15:u==="g"?q/14:0};
+  const gr=i=>{const q=+i[0]||0,u=i[1];return u==="g"?q:u==="kg"?q*1000:u==="slices"?q*20:u==="cup"||u==="cups"?q*100:u==="tbsp"?q*7:0};
+  const ps=x=>Math.round(x/s/5)*5;const nm=i=>String(i[2]).split(",")[0].replace(/\s*\(.*?\)/g,"");
+  const tips=[];
+  // oil
+  const oils=find(/oil(?! spray)/).filter(i=>!/chilli oil|per bowl|optional/.test(L(i)));const ot=oils.reduce((t,i)=>t+tbsp(i),0);
+  if(ot>=2){const keep=Math.max(1,Math.round(ot/2));tips.push([ps((ot-keep)*120),`This uses about ${Math.round(ot)} tbsp oil in total. Cook with ${keep} tbsp in a non-stick pan (or use spray) to save about ${ps((ot-keep)*120)} cal a serve.`])}
+  // carbs
+  const carb=find(/rice(?! paper| vinegar| wine| flour)|noodles|vermicelli|soba|pasta|spaghetti|orzo|risoni|quinoa/)[0];
+  if(carb&&!["oats","baking"].includes(r.cat)){const alt=/noodle|vermicelli|soba/.test(L(carb))?"zucchini noodles or extra bean sprouts":/pasta|spaghetti|orzo|risoni/.test(L(carb))?"zucchini ribbons or extra roasted veg":"extra steamed greens or grated zucchini";tips.push([ps(gr(carb)?Math.min(gr(carb),400)*1.8*0.5:300),`Swap half the ${nm(carb).toLowerCase()} for ${alt}. It keeps the bowl full for fewer calories.`])}
+  // mince/meat
+  const mince=find(/(beef|pork|lamb) mince/)[0];if(mince){tips.push([ps(gr(mince)*0.6),`Use lean ${nm(mince).toLowerCase().replace(/\s*\(.*$/,"")} (heart-smart or 5-star) and drain any fat after browning. Saves about ${ps(gr(mince)*0.6)} cal a serve.`])}
+  const thigh=find(/chicken thigh/)[0];if(thigh){tips.push([ps(gr(thigh)*0.3),`Use chicken breast instead of thigh to save about ${ps(gr(thigh)*0.3)} cal a serve.`])}
+  const bacon=find(/bacon/)[0];if(bacon)tips.push([ps(gr(bacon)*1.2),`Use short-cut bacon with the fat trimmed, or halve it.`]);
+  // cheese
+  const ch=find(/cheddar|mozzarella|parmesan|halloumi|feta|gruy|swiss|cheese(?! sauce)/).filter(i=>!/cream cheese/.test(L(i)));const cg=ch.reduce((t,i)=>t+gr(i),0);
+  if(cg>=40)tips.push([ps(cg*0.5*3.5),`Halve the ${nm(ch[0]).toLowerCase()} and use a sharp, strong one so a little goes further. Saves about ${ps(cg*0.5*3.5)} cal a serve.`]);
+  const cc=find(/cream cheese/)[0];if(cc)tips.push([ps(gr(cc)*0.5*1.5),`Use half the cream cheese and make up the rest with lactose-free Greek yoghurt.`]);
+  // creamy
+  const mayo=find(/mayo/);const mt=mayo.reduce((t,i)=>t+tbsp(i),0);if(mt>=1)tips.push([ps(mt*0.5*85),`Swap half the mayo (${Math.round(mt)} tbsp) for lactose-free Greek yoghurt. Same creaminess, about ${ps(mt*0.5*85)} fewer cal a serve.`]);
+  const coco=find(/coconut milk|coconut cream/).filter(i=>!/light/.test(L(i)))[0];if(coco)tips.push([ps(250*1.2),`Use light coconut milk instead of regular, about 60% fewer calories.`]);
+  const cream=find(/(?<!sour |coconut )cream(?! cheese)/).filter(i=>!/coconut/.test(L(i)))[0];if(cream)tips.push([ps(gr(cream)*1.5||150),`Use half cream and half lactose-free milk for the sauce.`]);
+  const sc=find(/sour cream/)[0];if(sc)tips.push([ps(tbsp(sc)*20),`Top with lactose-free Greek yoghurt instead of sour cream.`]);
+  // bread
+  const bread=find(/burger buns|sub rolls|baguette|sourdough|gluten-free bread|wraps|tortillas/)[0];if(bread&&r.cat!=="baking")tips.push([150,`Serve it in big iceberg or cos lettuce leaves instead of the ${nm(bread).toLowerCase().replace(/^(spelt sourdough or gluten-free bread)$/,"bread")}. Saves about 150 cal a serve.`]);
+  // nuts & sweet
+  const nut=find(/peanut butter|tahini|macadamia|peanuts|almonds|hazelnut|pine nut/).filter(i=>!/powdered|milk/.test(L(i)));if(nut.length){const nt=nut.reduce((t,i)=>t+(gr(i)||tbsp(i)*16),0);if(nt>=20)tips.push([ps(nt*0.5*6),`Halve the ${nut.map(nm).map(x=>x.toLowerCase()).slice(0,2).join(" and ")}. They’re nutritious but very calorie dense (about ${ps(nt*0.5*6)} cal a serve).`])}
+  const sw=find(/maple|sugar|honey/);const swt=sw.reduce((t,i)=>t+tbsp(i),0);if(swt>=1)tips.push([ps(swt*0.5*55),`Halve the ${nm(sw[0]).toLowerCase()}. You’ll barely notice, and it saves about ${ps(swt*0.5*55)} cal a serve.`]);
+  const choc=find(/chocolate/)[0];if(choc)tips.push([ps(gr(choc)*0.3*6),`Use 85% dark chocolate. It’s richer, so you can use about a third less.`]);
+  const milk=find(/lactose-free milk|coconut-almond/)[0];if(milk&&r.cat==="oats")tips.push([60,`Use unsweetened almond milk. It has about a quarter of the calories of milk.`]);
+  tips.sort((a,b)=>b[0]-a[0]);
+  // plants by cuisine
+  const asian=/soy|miso|sesame|fish sauce|ginger|noodle|vermicelli|soba|lemongrass|gochujang|curry paste|five spice|rice vinegar/.test(all);
+  const mex=/taco|nacho|fajita|quesadilla|tortilla|chipotle|jerk|mexican/.test(all);
+  const ind=/garam masala|korma|makhani|butter chicken|tikka|dhal|dal |curry powder/.test(all);
+  const ital=/pasta|spaghetti|orzo|lasagne|parmesan|passata|basil|oregano|pesto|bolognese|risotto/.test(all);
+  const sweet=r.cat==="oats"||r.cat==="baking";const cz=sweet?"s":ind?"i":ital?"t":mex?"m":asian?"a":"d";
+  const P=cz==="s"?[["blueberr","Stir in a handful of blueberries"],["strawberr","Top with sliced strawberries"],["kiwi","Add a sliced kiwi fruit"],["chia","Add 1 tsp chia seeds"],["hemp","Sprinkle over 1 tsp hemp seeds"],["pepita|pumpkin seed","Sprinkle with pepitas"],["sunflower","Add a few sunflower seeds"],["cinnamon","Add a pinch of cinnamon"],["linseed","Stir in 1 tsp ground linseed"],["raspberr","Top with a few raspberries"]]
+   :cz==="a"?[["bok choy","Add a bok choy, halved, for the last 2 minutes"],["bean sprout","Pile on a handful of bean sprouts"],["carrot","Add a carrot cut into matchsticks"],["cucumber","Serve with smashed cucumber on the side"],["wombok|cabbage","Add a handful of shredded wombok"],["coriander","Top with fresh coriander"],["mint","Add a few torn mint leaves"],["sesame","Sprinkle with sesame seeds"],["spinach","Wilt in a handful of baby spinach"],["green beans","Stir-fry a handful of green beans"],["red capsicum|capsicum","Add ¼ red capsicum, sliced"],["chilli","Add sliced fresh chilli"]]
+   :cz==="m"?[["lettuce|cos","Add shredded cos lettuce"],["tomato","Add diced tomato"],["coriander","Top with fresh coriander"],["capsicum","Add ¼ red capsicum, diced"],["cucumber","Add diced cucumber to a quick salsa"],["red cabbage","Add a little shredded red cabbage"],["carrot","Add grated carrot"],["chilli","Add sliced jalapeño or chilli"],["lime","Squeeze over fresh lime"],["spinach","Fold in a handful of baby spinach"],["pepita","Sprinkle with toasted pepitas"]]
+   :cz==="i"?[["spinach","Stir in two handfuls of baby spinach at the end"],["green beans","Add a handful of green beans with the sauce"],["zucchini","Add ⅓ zucchini, cubed"],["eggplant","Add a few cubes of eggplant"],["carrot","Add a diced carrot"],["coriander","Top with fresh coriander"],["cucumber","Serve with a cucumber and mint raita"],["tomato","Add a few cherry tomatoes"],["pepita","Sprinkle with toasted pepitas"]]
+   :cz==="t"?[["rocket","Serve on a bed of rocket"],["spinach","Stir through a handful of baby spinach"],["zucchini","Add ⅓ zucchini, sliced"],["tomato","Add a few cherry tomatoes"],["basil","Top with fresh basil"],["parsley","Add chopped parsley"],["olive","Add a few olives"],["eggplant","Add some roasted eggplant"],["kale","Toss through some torn kale"],["pine nut","Sprinkle with a few pine nuts"]]
+   :[["spinach","Add a handful of baby spinach"],["rocket","Add a handful of rocket"],["carrot","Add a grated carrot"],["cucumber","Add sliced cucumber"],["tomato","Add sliced tomato"],["capsicum","Add ¼ red capsicum"],["kale","Add some torn kale"],["green beans","Add a handful of green beans"],["parsley|chives|dill","Add fresh herbs like chives or parsley"],["pepita|sunflower","Sprinkle with pepitas or sunflower seeds"]];
+  const plants=P.filter(([k])=>!new RegExp(k).test(all)).slice(0,4).map(x=>x[1]+".");
+  return {light:tips.slice(0,3).map(t=>t[1]),plants};
 }
 function kcalOf(r){if(!r||r.cat==="broth"||r.id==="sourdough-starter")return 0;return (window.YC_KCAL||{})[r.id]||0}
 function rCard(r){
@@ -719,7 +745,7 @@ function vRecipe(id){
   <ul class="ilist">${ingHtml||'<li>No ingredients yet.</li>'}</ul>
   <div class="row" style="margin-top:12px"><button class="btn sm line" data-a="copyNeeds" data-id="${esc(r.id)}">${ic("copy")}Copy what I need (${needList.length})</button></div></div>
   ${r.ai&&r.fod?`<div class="panel tq"><h3>${ic("leaf")}Why it’s low FODMAP</h3><p class="small">${esc(r.fod)}</p>${r.swaps?`<p class="small"><b>Tips:</b> ${esc(r.swaps)}</p>`:""}</div>`:""}
-  ${(()=>{if(r.cat==="broth"||r.id==="sourdough-starter")return "";const tp=tipsFor(r);return `${tp.light.length?`<div class="panel white"><h3>${ic("leaf")}Make it lighter</h3>${tp.light.map(t=>`<p class="small" style="margin:6px 0 0">• ${esc(t)}</p>`).join("")}</div>`:""}${tp.plants.length?`<div class="panel tq"><h3>${ic("leaf")}Add more plants</h3><p class="small" style="margin:4px 0 6px">Every different plant counts toward your 30 a week. Try adding:</p>${tp.plants.map(t=>`<p class="small" style="margin:4px 0 0">• ${esc(t)}</p>`).join("")}<p class="small muted" style="margin:8px 0 0">All low FODMAP in these amounts.</p></div>`:""}`})()}
+  ${(()=>{if(r.cat==="broth"||r.id==="sourdough-starter")return "";const tp=tipsFor(r);return `${tp.light.length?`<div class="panel white"><h3>${ic("leaf")}Make it lighter</h3>${tp.light.map(t=>`<p class="small" style="margin:6px 0 0">• ${esc(t)}</p>`).join("")}</div>`:""}${tp.plants.length?`<div class="panel tq"><h3>${ic("leaf")}Add more plants</h3><p class="small" style="margin:4px 0 6px">Every different plant counts toward your 30 a week. For this one, try:</p>${tp.plants.map(t=>`<p class="small" style="margin:4px 0 0">• ${esc(t)}</p>`).join("")}<p class="small muted" style="margin:8px 0 0">All low FODMAP in these amounts.</p></div>`:""}`})()}
   ${flags.length?`<div class="panel warn"><h3>${ic("info")}Low FODMAP check</h3><p class="small">These ingredients may be high FODMAP. Suggested swaps:</p>${flags.map(x=>`<div class="flag"><b>${esc(x.line)}</b>${esc(x.issue)} <span class="muted">→ ${esc(x.swap)}</span></div>`).join("")}</div>`:(r.mine?`<div class="panel tq"><h3>${ic("check")}Low FODMAP check</h3><p class="small">No common high FODMAP ingredients spotted. Still check sauce and stock labels.</p></div>`:"")}
   <div class="panel white"><h3>${ic("pot")}Method</h3><ol class="steps">${stepHtml||"<li>No steps yet.</li>"}</ol>
   ${r.steps&&r.steps.length?`<button class="btn em full" style="margin-top:12px" data-a="cook" data-id="${esc(r.id)}">${ic("play")}Start Cook with me</button>`:""}</div>
